@@ -1,0 +1,73 @@
+
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background: hsl(0, 0%, 10%);
+        }
+        p {
+            margin: 0;
+            padding: 0;
+		}
+        .left,
+        .right {
+            position: absolute;
+            color: #fff;
+            font-family: Geneva, sans-serif;
+        }
+        .left {
+            bottom: 1em;
+            left: 1em;
+            text-align: left;
+        }
+        .right {
+            top: 0;
+            right: 0;
+            text-align: right;
+        }
+        a {
+            color: #f58231;
+        }
+		canvas {
+			width: 100%;
+			height: 100px;
+			display: block;
+		  }
+		  
+		  .annotation {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+			margin-left: 15px;
+			margin-top: 15px;
+			padding: 1em;
+			width: 200px;
+			color: #fff;
+			background: rgb(114, 97, 40,0.8);
+			border-radius: .8em;
+			font-size: 16px;
+			line-height: 1.2;
+			-webkit-transition: opacity .5s;
+			transition: opacity .5s;
+		  }
+		  .annotation::before {
+			content: '1';
+			position: absolute;
+			top: -30px;
+			left: -30px;
+			width: 30px;
+			height: 30px;
+			border: 2px solid #fff;
+			border-radius: 50%;
+			font-size: 16px;
+			line-height: 30px;
+			text-align: center;
+			background: rgba(163, 126, 2);
+		  }
+		  
+		  #number {
+			position: absolute;
+			z-index: -1;
+		  }
+		  

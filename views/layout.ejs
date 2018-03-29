@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%=typeof title == 'undefined' ? 'Zahn3D' : title%></title>
+    <title><%=typeof title == 'undefined' ? 'Archivierung kieferorthopädischer Modelle' : title%></title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="src/style.css">
+
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
@@ -13,7 +15,7 @@
 
   <body>
       <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
-          <a class="navbar-brand" href="#">Zahn 3D</a>
+          <a class="navbar-brand" href="#">Archivierung kieferorthopädischer Modelle</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -35,6 +37,7 @@
     <script src="js/OrbitControls.js"></script>
     <script src="js/OBJLoader.js"></script>
     <script src="js/MTLLoader.js"></script>
+    <script src="js/STLLoader.js"></script>
 	  <script src="js/dat.gui.min.js"></script>
     <script src="js/TrackballControls.js"></script>
     
@@ -50,6 +53,9 @@
    <script src="/js/OBJLoader.js"></script>
    <script src="/js/OBJLoader2.js"></script>
    <script src="/js/OrbitControls.js"></script>
+   <script src="/js/script01.js"></script>
+   <script src="/js/script02.js"></script>
+   <script src="/js/STLLoader.js"></script>
    <script src="/js/three.js"></script>
    <script src="/js/TrackballControls.js"></script>
    <!--SCRIPTS END-->

@@ -1,15 +1,48 @@
-<p class="mb-4">Nutzen Sie die zwei Varianten Zähne anzuzeigen</p>
-<a href="#patient-kiefer" class="btn btn-light" onClick="kiefer()" >Patient - Kiefer</a>
-<a href="#patient-zahn" class="btn btn-light" onClick="zahn()">Patient - Zahn</a>
+<div class="card-deck">
+        <div class="card">
+          <img class="card-img-top" src="images\modell_top.png" alt="vorhandene Modelle">
+          <div class="card-body">
+            <h5 class="card-title">Sehe dir die berits vorhandene Modelle</h5>
+            <p class="card-text">
+                    <a id="kiefer" href="#patient-kiefer"  class="btn btn-primary" >Patient - Kiefer</a>
+                    <a id="zahn" href="#patient-zahn"  class="btn btn-primary" >Patient - Zahn</a>
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="images\stl_top.png" alt=".obj oder .stl Model">
+          <div class="card-body">
+            <h5 class="card-title">Lade dein .obj oder .stl Model</h5>
+            <p class="card-text">
+                <form id="uploadForm" enctype="multipart/form-data" action="/file/upload" method="post">
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1"  class="btn btn-primary">
+    	            <input type="submit" value="submit" class="btn btn-primary"/>
+                </form>
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Annotationen</h5>
+            <p class="card-text">
+                <ul><li>1. Desen zab</li>
+                     </ul>
 
-<!--     <div class="annotation">
-        <p><strong>Cube</strong></p>
-        <p>In geometry, a cube is a three-dimensional solid object bounded by six square faces, facets or sides, with three meeting at each vertex.</p>
-      </div> -->
-      <br>
+            </p>
+          </div>
+        </div>
+</div>
+
+<!--   
+style="max-width: 21rem;" 
+Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-teeth-6b7374ef-8c18-4f47-aee2-539ba0266185  
+<div class="annotation">
+<p><strong>Cube</strong></p>
+<p>In geometry, a cube is a three-dimensional solid object bounded by six square faces, facets or sides, with three meeting at each vertex.</p>
+</div> -->
+
       <a href="#tests"></a><canvas id="number" width="64" height="64" style="visibility: hidden"></canvas></a>
       <script>
-      var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
 
           if (!Detector.webgl) {Detector.addGetWebGLMessage();}
       // Ab Hier Aufkleber
@@ -20,9 +53,9 @@
       const radius = 30;
       const startAngle = 0;
       const endAngle = Math.PI * 2;
-      let sprite;
-      let mesh;
-      let spriteBehindObject;
+      var sprite;
+      var mesh;
+      var spriteBehindObject;
       const annotation = document.querySelector(".annotation");
       
       ctx.fillStyle = "rgb(0, 0, 0)";
@@ -42,7 +75,7 @@
       // Bis Hier Aufkleber
       // Varijabli za Guito
       var gui;
-      var API = {
+ /*      var API = {
         offsetX: 0,
         offsetY: 0,
         repeatX: 0.25,
@@ -50,7 +83,7 @@
         rotation: Math.PI / 4, // positive is counter-clockwise
         centerX: 0.5,
         centerY: 0.5
-      };
+      }; */
       
           var container;
           var camera, controls, scene, renderer;
@@ -78,33 +111,53 @@
                       scene.add(keyLight);
                       scene.add(fillLight);
                       scene.add(backLight);  
-        /* Model */
-        var objLoader = new THREE.OBJLoader();
-        objLoader.load('model/patient-kiefer.obj', function (object) {
-                object.scale.x = 0.023;
-                object.scale.y = 0.023;					
-                object.scale.z = 0.023;
-                scene.add(object);
-                });
-        function kiefer(){
-                objLoader.load('model/patient-kiefer.obj', function (object) {
-                object.scale.x = 0.023;
-                object.scale.y = 0.023;					
-                object.scale.z = 0.023;
-                scene.add(object);
-                alert("1");
-               }); }  
+        /* .obj Model */
+       
         
-        function zahn(){     
-              objLoader.load('model/patient-zahn.obj', function (object) {
+        document.getElementById("zahn").addEventListener("click", displayZahn);
+        document.getElementById("kiefer").addEventListener("click", displayKiefer);
+        
+        function displayZahn(){
+           // displayKiefer().objLoader.remove(object);
+            var objLoader = new THREE.OBJLoader();
+            objLoader.load('model/patient-zahn.obj', function (object2) {
+            object2.scale.x = 0.023;
+            object2.scale.y = 0.023;					
+            object2.scale.z = 0.023;
+            scene.add(object2);
+          });
+        }
+
+        function displayKiefer(){
+            var objLoader = new THREE.OBJLoader();
+            objLoader.load('model/patient-kiefer.obj', function (object) {
               object.scale.x = 0.023;
               object.scale.y = 0.023;					
               object.scale.z = 0.023;
               scene.add(object);
-                alert("2");
           });
-          } 
+        }
+        
+        function removeObject(object){
+            scene.remove(object);
+        }
 
+        /* STL Model */
+
+				var stlLoader = new THREE.STLLoader();
+				stlLoader.load( 'model/slotted_disk.stl', function ( geometry ) {
+
+					var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
+					var meshstl = new THREE.Mesh( geometry, material );
+
+					meshstl.position.set( 0, - 0.25, 0.6 );
+                    meshstl.scale.set( 0.5, 0.5, 0.5 );
+                    meshstl.castShadow = true;
+					meshstl.receiveShadow = true;
+					scene.add( meshstl );
+
+				} );
+            
               /* Renderer */
               renderer = new THREE.WebGLRenderer();
               renderer.setPixelRatio(window.devicePixelRatio);
@@ -142,7 +195,7 @@
             sprite.scale.set(0.15, 0.15, 1);
             scene.add(sprite);
             
-            initGui();
+           // initGui();
         } 
             /* Screen Projection */
           
@@ -168,7 +221,7 @@
           
       // Bis Hier Aufkleber
       // Definirat Gui
-      function initGui() {
+/*       function initGui() {
           gui = new dat.GUI();
           gui.add( API, 'offsetX', 0.0, 1.0 ).name( 'offset.x' );
           gui.add( API, 'offsetY', 0.0, 1.0 ).name( 'offset.y' );
@@ -177,7 +230,7 @@
           gui.add( API, 'rotation', - 2.0, 2.0 ).name( 'rotation' );
           gui.add( API, 'centerX', 0.0, 1.0 ).name( 'center.x' );
           gui.add( API, 'centerY', 0.0, 1.0 ).name( 'center.y' );
-      }
+      } */
   
           function onWindowResize() {
               camera.aspect = window.innerWidth / window.innerHeight;
