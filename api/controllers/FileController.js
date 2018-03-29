@@ -23,7 +23,7 @@ module.exports = {
       
               console.log(files);
               res.json({ status: 200, file: files });
-          });
+          }).listen(process.env.PORT || 5000);
       }
 
 };
