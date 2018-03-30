@@ -32,9 +32,12 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  },
+  '/': [
+    {view: 'homepage'}
+  ],
+
+  'POST /stl': 'FileController.upload',
+
 
   /***************************************************************************
   *                                                                          *
@@ -45,9 +48,10 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-/*  '/upload-file':{
-  view: 'uploadfile'  // view 'uploadfile' in views directory will loaded automatically 
-}
-  */
+//  '/file/upload':{
+   
+//   view: 'houmepage'  // view 'uploadfile' in views directory will loaded automatically
+//  }
+  
   
 };

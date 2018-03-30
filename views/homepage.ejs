@@ -1,37 +1,53 @@
-<div class="card-deck">
+<div class="card-deck" style="margin-bottom:10px;padding:0">
         <div class="card">
           <img class="card-img-top" src="images\modell_top.png" alt="vorhandene Modelle">
           <div class="card-body">
-            <h5 class="card-title">Sehe dir die berits vorhandene Modelle</h5>
+            <h6 class="card-title">Sehe dir die berits vorhandene Modelle</h6>
             <p class="card-text">
-                    <a id="kiefer" href="#patient-kiefer"  class="btn btn-primary" >Patient - Kiefer</a>
-                    <a id="zahn" href="#patient-zahn"  class="btn btn-primary" >Patient - Zahn</a>
+                    <a id="kiefer" href="#patient-kiefer"  class="btn btn-primary" >Kiefer</a>
+                    <a id="zahn" href="#patient-zahn"  class="btn btn-primary" >Zahnfleisch</a>
             </p>
           </div>
         </div>
         <div class="card">
           <img class="card-img-top" src="images\stl_top.png" alt=".obj oder .stl Model">
           <div class="card-body">
-            <h5 class="card-title">Lade dein .obj oder .stl Model</h5>
+            <h6 class="card-title">Lade ein .stl Model (Binär) hoch!</h6>
             <p class="card-text">
-                <form id="uploadForm" enctype="multipart/form-data" action="/file/upload" method="post">
-                    <input type="file" class="form-control-file" id="exampleFormControlFile1"  class="btn btn-primary">
-    	            <input type="submit" value="submit" class="btn btn-primary"/>
+                <form id="uploadForm" enctype="multipart/form-data"   action="/stl" method="post">  
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="uploadFile"  class="btn btn-primary" style="margin-bottom:10px">
+                    <input type="submit" value="Upload" class="btn btn-primary"/>
+                    <a id="stl" href="#stl-zahn"  class="btn btn-primary" >Laden</a>
+                    
                 </form>
             </p>
           </div>
         </div>
         <div class="card">
+                <div class="card-body">                   
+                    <p class="card-text"><b>Dateiname:</b>
+                    <% if(typeof file !== 'undefined'){ %>
+                        <div class='test' id="test" data-test-value='<%= file %>'><%= file %></div>
+                    <% } %>
+                    </p>   
+                    <canvas id="number" width="64" height="64" style="visibility: hidden"></canvas>                 
+                </div>
+            </div>
+        <div class="card">
           <div class="card-body">
             <h5 class="card-title">Annotationen</h5>
             <p class="card-text">
-                <ul><li>1. Desen zab</li>
-                     </ul>
-
+                    <div class="annotation">
+                            <p><strong>Zahn nr.:</strong></p>
+                            <p>Nutzen Sie die Gelegentheit, dieser zahn näher anzuschauen.</p>
+                        </div>
             </p>
           </div>
         </div>
+
 </div>
+    
+
 
 <!--   
 style="max-width: 21rem;" 
@@ -41,7 +57,6 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
 <p>In geometry, a cube is a three-dimensional solid object bounded by six square faces, facets or sides, with three meeting at each vertex.</p>
 </div> -->
 
-      <a href="#tests"></a><canvas id="number" width="64" height="64" style="visibility: hidden"></canvas></a>
       <script>
 
           if (!Detector.webgl) {Detector.addGetWebGLMessage();}
@@ -53,7 +68,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
       const radius = 30;
       const startAngle = 0;
       const endAngle = Math.PI * 2;
-      var sprite;
+      var sprite,sprite2;
       var mesh;
       var spriteBehindObject;
       const annotation = document.querySelector(".annotation");
@@ -116,48 +131,63 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
         
         document.getElementById("zahn").addEventListener("click", displayZahn);
         document.getElementById("kiefer").addEventListener("click", displayKiefer);
+        document.getElementById("stl").addEventListener("click", displayStl);
         
+        var elementi=0;
+        var displayZahnCount=0;
+        var displayKieferCount=0;
+     
         function displayZahn(){
+          //  scene.remove(scene.children[j]);
            // displayKiefer().objLoader.remove(object);
             var objLoader = new THREE.OBJLoader();
             objLoader.load('model/patient-zahn.obj', function (object2) {
             object2.scale.x = 0.023;
             object2.scale.y = 0.023;					
             object2.scale.z = 0.023;
+            delAll(5);
+            delAll(6);
             scene.add(object2);
           });
         }
 
-        function displayKiefer(){
+        function displayKiefer(){  
             var objLoader = new THREE.OBJLoader();
             objLoader.load('model/patient-kiefer.obj', function (object) {
               object.scale.x = 0.023;
               object.scale.y = 0.023;					
               object.scale.z = 0.023;
               scene.add(object);
+              displayKieferCount++;            
           });
-        }
-        
-        function removeObject(object){
-            scene.remove(object);
         }
 
         /* STL Model */
-
-				var stlLoader = new THREE.STLLoader();
-				stlLoader.load( 'model/slotted_disk.stl', function ( geometry ) {
-
-					var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-					var meshstl = new THREE.Mesh( geometry, material );
-
-					meshstl.position.set( 0, - 0.25, 0.6 );
-                    meshstl.scale.set( 0.5, 0.5, 0.5 );
-                    meshstl.castShadow = true;
-					meshstl.receiveShadow = true;
-					scene.add( meshstl );
-
-				} );
-            
+      
+        function displayStl(){
+            var fajl;
+            if(document.getElementById("test").innerHTML==null){
+                fajl="model/sszahn_matr_01.stl"} else{
+                fajl=  document.getElementById("test").innerHTML;}
+            var loader = new THREE.STLLoader();
+            var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
+                loader.load( 'images/'+fajl, function ( geometry ) {
+                    var mesh = new THREE.Mesh( geometry, material );
+                    mesh.scale.x = 0.023;
+                    mesh.scale.y = 0.023;
+                    mesh.scale.z = 0.023;
+                    mesh.castShadow = true;
+                    mesh.receiveShadow = true;                  
+                    scene.add( mesh );
+            });
+        } 
+        
+        function delAll(minus){
+            if(minus>0){
+                scene.remove(scene.children[5]);
+            }
+        }
+                    
               /* Renderer */
               renderer = new THREE.WebGLRenderer();
               renderer.setPixelRatio(window.devicePixelRatio);
@@ -194,6 +224,11 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
             sprite.position.set(0.5, 0.1, 0);
             sprite.scale.set(0.15, 0.15, 1);
             scene.add(sprite);
+
+            sprite2 = new THREE.Sprite(spriteMaterial);
+            sprite2.position.set(-.5, 0.1, 0);
+            sprite2.scale.set(0.15, 0.15, 1);
+            scene.add(sprite2);
             
            // initGui();
         } 
