@@ -1,4 +1,4 @@
-<div class="card-deck" style="margin-bottom:10px;padding:0;">
+<div class="card-deck" id="topdiv" style="margin-bottom:10px;padding:0;">
         <div class="card">
           <img class="card-img-top" src="images\modell_top.png" alt="vorhandene Modelle">
           <div class="card-body">
@@ -261,8 +261,9 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
         } 
 
             function scrollS() {
-                var scroller = document.body.scrollHeight-1222;
-                window.scrollTo(0,scroller); }          
+                var topdiv = document.getElementById("topdiv");
+                //var scroller = document.body.scrollHeight- topdiv.scrollHeight+200;
+                window.scrollTo(0, topdiv.scrollHeight+100); }          
 
         
           function onWindowResize() {
