@@ -1,170 +1,243 @@
-<div class="card-deck" style="margin-bottom:10px;padding:0">
+<div class="card-deck" style="margin-bottom:10px;padding:0;">
         <div class="card">
           <img class="card-img-top" src="images\modell_top.png" alt="vorhandene Modelle">
           <div class="card-body">
-            <h6 class="card-title">Sehe dir die berits vorhandene Modelle</h6>
+            <h5 class="card-title">Vorgeladene Modelle ansehen</h5>
             <p class="card-text">
-                    <a id="kiefer" href="#patient-kiefer"  class="btn btn-primary" >Kiefer</a>
-                    <a id="zahn" href="#patient-zahn"  class="btn btn-primary" >Zahnfleisch</a>
+                    <a id="kiefer" href="#patient-kiefer"  class="btn btn-primary" style="margin-top:5px">Kiefer</a>
+                    <a id="zahn" href="#patient-zahn"  class="btn btn-primary" style="margin-top:5px">Zahnfleisch</a>
+                    <a id="reset" href="#reset"  class="btn btn-danger" style="margin-top:5px" >Szene leeren</a>
             </p>
           </div>
         </div>
         <div class="card">
           <img class="card-img-top" src="images\stl_top.png" alt=".obj oder .stl Model">
           <div class="card-body">
-            <h6 class="card-title">Lade ein .stl Model (Binär) hoch!</h6>
+            <h5 class="card-title">Lade ein .stl Model (Binär) hoch!</h5>
             <p class="card-text">
                 <form id="uploadForm" enctype="multipart/form-data"   action="/stl" method="post">  
-                    <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="uploadFile"  class="btn btn-primary" style="margin-bottom:10px">
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="uploadFile"  class="custom-file-input" style="margin-bottom:10px">
                     <input type="submit" value="Upload" class="btn btn-primary"/>
-                    <a id="stl" href="#stl-zahn"  class="btn btn-primary" >Laden</a>
-                    
+                    <a id="stl" href="#stl-zahn"  class="btn btn-primary" >Laden</a></br>
                 </form>
             </p>
           </div>
         </div>
         <div class="card">
-                <div class="card-body">                   
-                    <p class="card-text"><b>Dateiname:</b>
-                    <% if(typeof file !== 'undefined'){ %>
-                        <div class='test' id="test" data-test-value='<%= file %>'><%= file %></div>
-                    <% } %>
-                    </p>   
-                    <canvas id="number" width="64" height="64" style="visibility: hidden"></canvas>                 
-                </div>
+            <div class="card-body">
+                <h5 class="card-title">Anleitung</h5>
+                <p class="card-text">
             </div>
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Annotationen</h5>
-            <p class="card-text">
-                    <div class="annotation">
-                            <p><strong>Zahn nr.:</strong></p>
-                            <p>Nutzen Sie die Gelegentheit, dieser zahn näher anzuschauen.</p>
-                        </div>
-            </p>
+            <div class="card-footer">
+                    <small class="text-dark"><b>Dateiname:</b> <% if(typeof file !== 'undefined'){ %>
+                        <div class='test' id="test" data-test-value='<%= file %>'><%= file %></div>
+                    <% } %></p></small>
+                  </div>
+            </div>
           </div>
-        </div>
-
 </div>
-    
+<div id="annodiv" style="position: absolute; left:75%;margin-top:20px; visibility:hidden;">
+    <div class="card " >
+        <div class="card-body">
+          <p class="card-text"><ul class="list-group" id="annotation"></ul></p>
+        </div>
+        <div class="card-footer">
+          <small class="text-dark"><b>Notizen</b> - Stelle doppelklicken, um Punkte zum Notieren zu setzen!</small>
+        </div>
+    </div>
+</div>
+	
 
 
 <!--   
-style="max-width: 21rem;" 
+Code Autor: Boban Jordanoski | THM 2017-2018
 Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-teeth-6b7374ef-8c18-4f47-aee2-539ba0266185  
-<div class="annotation">
-<p><strong>Cube</strong></p>
-<p>In geometry, a cube is a three-dimensional solid object bounded by six square faces, facets or sides, with three meeting at each vertex.</p>
-</div> -->
+ -->
 
       <script>
 
           if (!Detector.webgl) {Detector.addGetWebGLMessage();}
       // Ab Hier Aufkleber
-      const canvas = document.getElementById("number");
-      const ctx = canvas.getContext("2d");
       const x = 32;
       const y = 32;
       const radius = 30;
       const startAngle = 0;
       const endAngle = Math.PI * 2;
-      var sprite,sprite2;
       var mesh;
-      var spriteBehindObject;
-      const annotation = document.querySelector(".annotation");
-      
-      ctx.fillStyle = "rgb(0, 0, 0)";
-      ctx.beginPath();
-      ctx.arc(x, y, radius, startAngle, endAngle);
-      ctx.fill();
-      ctx.strokeStyle = "rgb(255, 255, 255)";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, startAngle, endAngle);
-      ctx.stroke();
-      ctx.fillStyle = "rgb(255, 255, 255)";
-      ctx.font = "32px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("1", x, y);
-      // Bis Hier Aufkleber
-      // Varijabli za Guito
       var gui;
- /*      var API = {
-        offsetX: 0,
-        offsetY: 0,
-        repeatX: 0.25,
-        repeatY: 0.25,
-        rotation: Math.PI / 4, // positive is counter-clockwise
-        centerX: 0.5,
-        centerY: 0.5
-      }; */
-      
-          var container;
-          var camera, controls, scene, renderer;
-          var lighting, ambient, keyLight, fillLight, backLight;		
+      var container,stats;
+      var camera, controls, scene, renderer;
+      var lighting, ambient, keyLight, fillLight, backLight;
+      var raycaster,projector;
+      var objects = [];
+      var counter=1;
+
       init();
       animate();
-      function init() {    
+
+    function init() {    
         container = document.createElement('div');
         document.body.appendChild( container );      
         /* Camera */
-              camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-              camera.position.z = 3;
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 3;
         /* Scene */
-              scene = new THREE.Scene();
-              lighting = false;
-              ambient = new THREE.AmbientLight(0xffffff, 1.0);
-              scene.add(ambient);
-              keyLight = new THREE.DirectionalLight(0xffffff, 0.5);
-              keyLight.position.set(-100, 0, 100);
-              fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
-              fillLight.position.set(100, 0, 100);
-              backLight = new THREE.DirectionalLight(0xffffff, 0.5);
-              backLight.position.set(100, 0, -100).normalize();
-              ambient.intensity = 0.1;
-                      scene.add(keyLight);
-                      scene.add(fillLight);
-                      scene.add(backLight);  
-        /* .obj Model */
-       
+            scene = new THREE.Scene();
+            lighting = false;
+            ambient = new THREE.AmbientLight(0xffffff, 1.0);
+            keyLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            keyLight.position.set(-100, 0, 100);
+            fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            fillLight.position.set(100, 0, 100);
+            backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            backLight.position.set(100, 0, -100).normalize();
+            ambient.intensity = 0.1;
+                scene.add(ambient);
+                scene.add(keyLight);
+                scene.add(fillLight);
+                scene.add(backLight);  
+
+        /* Funktionen Aufrufen */
+            document.getElementById("zahn").addEventListener("click", displayZahn);
+            document.getElementById("kiefer").addEventListener("click", displayKiefer);
+            document.getElementById("stl").addEventListener("click", displayStl);    
+            document.getElementById("reset").addEventListener("click", resetView);   
+            
+        /* Renderer */
+            renderer = new THREE.WebGLRenderer();
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(new THREE.Color("hsl(0, 0%, 10%)"));
+            container.appendChild(renderer.domElement);
+            projector = new THREE.Projector();
+              
+ 
+				document.addEventListener( 'dblclick', ondblclick, false );//novo
         
-        document.getElementById("zahn").addEventListener("click", displayZahn);
-        document.getElementById("kiefer").addEventListener("click", displayKiefer);
-        document.getElementById("stl").addEventListener("click", displayStl);
+        /* Controls */
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.enableZoom = true;
         
-        var elementi=0;
-        var displayZahnCount=0;
-        var displayKieferCount=0;
-     
+        /* Events */
+            window.addEventListener('resize', onWindowResize, false);
+        //    window.addEventListener('keydown', onKeyboardEvent, false);  
+
+        
+
+} /*------------------------------ Bis hier die Initi -----------------------------------------------*/
+        function resetView(){
+            while(scene.children.length > 0){ 
+                scene.remove(scene.children[0]); 
+            }
+                scene.add(ambient);
+                scene.add(keyLight);
+                scene.add(fillLight);
+                scene.add(backLight);  
+                document.getElementById('annotation').innerHTML= "";
+
+        }
+
+        function goSprite(name,px, py, pz){
+            var anno = document.getElementById('annotation');
+            var newcontent = document.createElement('li');
+            var span = document.createElement("span");
+            var input = document.createElement("input");
+
+            newcontent.setAttribute("class","list-group-item justify-content-between");
+            span.setAttribute("class","badge badge-pill badge-primary");
+            span.setAttribute("style","position:absolute;margin-top:10px;");
+            input.setAttribute("style","margin-left:10px;");
+            input.setAttribute("class","form-control");
+            input.setAttribute("type","text");
+            input.setAttribute("placeholder","Kommentar zu dem Punkt "+name);
+           
+            
+            anno.appendChild(newcontent);
+            newcontent.appendChild(span);
+            newcontent.appendChild(input);
+            span.innerHTML=name;
+        
+            
+
+
+            
+       //     newcontent.innerHTML=name;
+            //while (newcontent.firstChild) {
+            //    anno.appendChild(newcontent.firstChild);
+           // }
+//            anno.appendChild(document.createTextNode("<li>"+name+"</li>"));
+
+            var canvas = document.createElement('canvas');
+            canvas.setAttribute("width","64");
+            canvas.setAttribute("height","64");
+            canvas.setAttribute("id","number");
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "rgb(0, 0, 0)";
+            ctx.beginPath();
+            ctx.arc(x, y, radius, startAngle, endAngle);
+            ctx.fill();
+            ctx.strokeStyle = "rgb(255, 255, 255)";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, startAngle, endAngle);
+            ctx.stroke();
+            ctx.fillStyle = "rgb(255, 255, 255)";
+            ctx.font = "32px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(name, x, y);
+
+        const numberTexture = new THREE.CanvasTexture(canvas);
+               
+            numberTexture.needsUpdate = true;
+
+        const spriteMaterial = new THREE.SpriteMaterial({
+              map: numberTexture,
+              alphaTest: 0.5,
+              transparent: true,
+              depthTest: false,
+              depthWrite: false
+            });
+
+
+            var nameSprite = new THREE.Sprite(spriteMaterial);
+            nameSprite.position.set(px,py,pz);
+            nameSprite.scale.set(0.15, 0.15,1);
+            
+            return nameSprite;
+        }
+
+
         function displayZahn(){
-          //  scene.remove(scene.children[j]);
-           // displayKiefer().objLoader.remove(object);
+            document.getElementById("annodiv").style.visibility = "visible"; 
             var objLoader = new THREE.OBJLoader();
-            objLoader.load('model/patient-zahn.obj', function (object2) {
-            object2.scale.x = 0.023;
-            object2.scale.y = 0.023;					
-            object2.scale.z = 0.023;
-            delAll(5);
-            delAll(6);
-            scene.add(object2);
-          });
+            objLoader.load('model/zahnfleisch.obj', function (object2) {
+                object2.scale.x = 0.023;
+                object2.scale.y = 0.023;					
+                object2.scale.z = 0.023;
+                //delAll(1);
+                scene.add(object2); 
+                objects.push( object2 ); });
+
         }
 
         function displayKiefer(){  
+            document.getElementById("annodiv").style.visibility = "visible"; 
             var objLoader = new THREE.OBJLoader();
             objLoader.load('model/patient-kiefer.obj', function (object) {
-              object.scale.x = 0.023;
-              object.scale.y = 0.023;					
-              object.scale.z = 0.023;
-              scene.add(object);
-              displayKieferCount++;            
-          });
+                object.scale.x = 0.023;
+                object.scale.y = 0.023;					
+                object.scale.z = 0.023;
+                scene.add(object);
+                objects.push(object);
+             });
         }
 
-        /* STL Model */
-      
         function displayStl(){
+            document.getElementById("annodiv").style.visibility = "visible"; 
+            resetView();
             var fajl;
             if(document.getElementById("test").innerHTML==null){
                 fajl="model/sszahn_matr_01.stl"} else{
@@ -179,117 +252,41 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
                     mesh.castShadow = true;
                     mesh.receiveShadow = true;                  
                     scene.add( mesh );
+                    objects.push( mesh );
             });
         } 
         
-        function delAll(minus){
-            if(minus>0){
-                scene.remove(scene.children[5]);
-            }
-        }
-                    
-              /* Renderer */
-              renderer = new THREE.WebGLRenderer();
-              renderer.setPixelRatio(window.devicePixelRatio);
-              renderer.setSize(window.innerWidth, window.innerHeight);
-              renderer.setClearColor(new THREE.Color("hsl(0, 0%, 10%)"));
-              container.appendChild(renderer.domElement);
-        
-              /* Controls */
-              controls = new THREE.OrbitControls(camera, renderer.domElement);
-              controls.enableDamping = true;
-              controls.dampingFactor = 0.25;
-              controls.enableZoom = true;
-        
-              /* Events */
-              window.addEventListener('resize', onWindowResize, false);
-              window.addEventListener('keydown', onKeyboardEvent, false);
-          
-      
-            // Ab Hier Aufkleber
-  
-            const numberTexture = new THREE.CanvasTexture(
-              document.querySelector("#number")
-            );
-  
-            const spriteMaterial = new THREE.SpriteMaterial({
-              map: numberTexture,
-              alphaTest: 0.5,
-              transparent: true,
-              depthTest: false,
-              depthWrite: false
-            });
-  
-            sprite = new THREE.Sprite(spriteMaterial);
-            sprite.position.set(0.5, 0.1, 0);
-            sprite.scale.set(0.15, 0.15, 1);
-            scene.add(sprite);
-
-            sprite2 = new THREE.Sprite(spriteMaterial);
-            sprite2.position.set(-.5, 0.1, 0);
-            sprite2.scale.set(0.15, 0.15, 1);
-            scene.add(sprite2);
-            
-           // initGui();
-        } 
-            /* Screen Projection */
-          
-          function updateScreenPosition() {
-            const vector = new THREE.Vector3(250, 250, 250);
-            const canvas = renderer.domElement; // `renderer` is a THREE.WebGLRenderer
-            const annotation = document.querySelector('.annotation');
-            vector.project(camera); // `camera` is a THREE.PerspectiveCamera
-            vector.x = Math.round((0.5 + vector.x / 2) * (canvas.width / window.devicePixelRatio));
-            vector.y = Math.round((0.5 - vector.y / 2) * (canvas.height / window.devicePixelRatio));
-            annotation.style.top = `${vector.y}px`;
-            annotation.style.left = `${vector.x}px`;
-            annotation.style.opacity = spriteBehindObject ? 0.25 : 1;
-          }
-          
-          function updateAnnotationOpacity() {
-            const meshDistance = camera.position.distanceTo(objLoader.position);
-            const spriteDistance = camera.position.distanceTo(sprite.position);
-            spriteBehindObject = spriteDistance > meshDistance;
-            sprite.material.opacity = spriteBehindObject ? 0.25 : 1;
-            annotation.style.opacity = spriteBehindObject ? 0.25 : 1;
-          }
-          
-      // Bis Hier Aufkleber
-      // Definirat Gui
-/*       function initGui() {
-          gui = new dat.GUI();
-          gui.add( API, 'offsetX', 0.0, 1.0 ).name( 'offset.x' );
-          gui.add( API, 'offsetY', 0.0, 1.0 ).name( 'offset.y' );
-          gui.add( API, 'repeatX', 0.25, 2.0 ).name( 'repeat.x' );
-          gui.add( API, 'repeatY', 0.25, 2.0 ).name( 'repeat.y' );
-          gui.add( API, 'rotation', - 2.0, 2.0 ).name( 'rotation' );
-          gui.add( API, 'centerX', 0.0, 1.0 ).name( 'center.x' );
-          gui.add( API, 'centerY', 0.0, 1.0 ).name( 'center.y' );
-      } */
-  
           function onWindowResize() {
               camera.aspect = window.innerWidth / window.innerHeight;
               camera.updateProjectionMatrix();
               renderer.setSize(window.innerWidth, window.innerHeight);
           }
-          function onKeyboardEvent(e) {
-              if (e.code === 'KeyL') {
-                  lighting = !lighting;
-                  if (lighting) {
-            ambient.intensity = 1.0;
-                      scene.remove(keyLight);
-                      scene.remove(fillLight);
-                      scene.remove(backLight);
-                      
-                  } else {   
-            ambient.intensity = 0.1;
-                      scene.add(keyLight);
-                      scene.add(fillLight);
-                      scene.add(backLight);
-                  }
-              }
-          }
-          function animate() {
+
+        function ondblclick( e ) {
+
+                e.preventDefault();
+
+                var mouse = new THREE.Vector3();
+                mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( e.clientY/ window.innerHeight) * 2 + 1;
+                mouse.z = 1;
+                console.log(renderer.domElement.offsetLeft);
+                console.log(renderer.domElement.offsetTop);
+
+                mouse.unproject(camera);
+                var raycaster = new THREE.Raycaster( camera.position, mouse.sub( camera.position ).normalize() );
+                var intersects = raycaster.intersectObjects( objects,true );
+                
+                if ( intersects.length > 0 ) {
+                    var spr;
+                    spr = goSprite(counter,intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+                    scene.add(spr);
+                    counter++; 
+                    console.log(counter);
+                }
+        }
+
+        function animate() {
               requestAnimationFrame(animate);
               controls.update();
               render();
