@@ -101,8 +101,9 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
             document.getElementById("zahn").addEventListener("click", displayZahn);
             document.getElementById("kiefer").addEventListener("click", displayKiefer);
             document.getElementById("stl").addEventListener("click", displayStl);    
-            document.getElementById("reset").addEventListener("click", resetView);   
+            document.getElementById("reset").addEventListener("click", resetView);
             
+
         /* Renderer */
             renderer = new THREE.WebGLRenderer();
             renderer.setPixelRatio(window.devicePixelRatio);
@@ -212,6 +213,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
 
         function displayZahn(){
             document.getElementById("annodiv").style.visibility = "visible"; 
+            scrollS();
             var objLoader = new THREE.OBJLoader();
             objLoader.load('model/zahnfleisch.obj', function (object2) {
                 object2.scale.x = 0.023;
@@ -225,6 +227,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
 
         function displayKiefer(){  
             document.getElementById("annodiv").style.visibility = "visible"; 
+            scrollS();
             var objLoader = new THREE.OBJLoader();
             objLoader.load('model/patient-kiefer.obj', function (object) {
                 object.scale.x = 0.023;
@@ -237,6 +240,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
 
         function displayStl(){
             document.getElementById("annodiv").style.visibility = "visible"; 
+            scrollS();
             resetView();
             var fajl;
             if(document.getElementById("test").innerHTML==null){
@@ -255,6 +259,11 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
                     objects.push( mesh );
             });
         } 
+
+            function scrollS() {
+                var scroller = document.body.scrollHeight-1222;
+                window.scrollTo(0,scroller); }          
+
         
           function onWindowResize() {
               camera.aspect = window.innerWidth / window.innerHeight;
