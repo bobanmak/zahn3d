@@ -2,7 +2,7 @@
         <div class="card">
           <img class="card-img-top" src="images\modell_top.png" alt="vorhandene Modelle">
           <div class="card-body">
-            <h5 class="card-title">Vorgeladene Modelle ansehen</h5>
+            <h5 class="card-title"><b>1.</b> Vorgeladene Modelle ansehen</h5>
             <p class="card-text">
                     <a id="kiefer" href="#patient-kiefer"  class="btn btn-primary" style="margin-top:5px">Kiefer</a>
                     <a id="zahn" href="#patient-zahn"  class="btn btn-primary" style="margin-top:5px">Zahnfleisch</a>
@@ -13,7 +13,7 @@
         <div class="card">
           <img class="card-img-top" src="images\stl_top.png" alt=".obj oder .stl Model">
           <div class="card-body">
-            <h5 class="card-title">Lade ein .stl Model (Binär) hoch!</h5>
+            <h5 class="card-title"><b>2.</b> Lade ein .stl Model (Binär) hoch!</h5>
             <p class="card-text">
                 <form id="uploadForm" enctype="multipart/form-data"   action="/stl" method="post">  
                     <input type="file" class="form-control-file" id="exampleFormControlFile1"  name="uploadFile"  class="custom-file-input" style="margin-bottom:10px">
@@ -25,8 +25,13 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Anleitung</h5>
-                <p class="card-text">
+                    <h6 class="card-title"><b>1. Vorgeladene Modelle ansehen</b></h6>
+                    <p class="card-text">
+                            - es werden zwei .obj Modelle zur Verfügung gestellt. Diese können entweder einzeln oder gemeinsam dargestellt und annotiert werden. 
+                
+                            <h6><b>2. Lade ein .stl Model (Binär) hoch</b></h6>
+                            - kann für das Hochalden ein .stl Model benutzt werden. Hinweis: Nach dem "Upload" bitte den Knopf "Laden" 2xMal drücken.
+                </p>                
             </div>
             <div class="card-footer">
                     <small class="text-dark"><b>Dateiname:</b> <% if(typeof file !== 'undefined'){ %>
