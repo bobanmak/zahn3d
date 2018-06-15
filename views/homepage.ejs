@@ -47,10 +47,133 @@
           <p class="card-text"><ul class="list-group" id="annotation"></ul></p>
         </div>
         <div class="card-footer">
-          <small class="text-dark"><b>Notizen</b> - Stelle doppelklicken, um Punkte zum Notieren zu setzen!</small>
-        </div>
+          <!--<small class="text-dark"><b>Notizen</b> - Stelle doppelklicken, um Punkte zum Notieren zu setzen!</small>-->
+          <label class="btn btn-info" onclick="setA()" >
+                a
+           </label>
+           <label class="btn btn-info" onclick="setB()">
+                b
+            </label>
+            <label class="btn btn-info" onclick="setE()">
+                e
+            </label>
+            <label class="btn btn-info" onclick="setEW()">
+                ew
+            </label>
+            <label class="btn btn-info" onclick="setF()">
+                f
+            </label>
+           <label class="btn btn-info" onclick="setI()">
+                i
+            </label>
+            <label class="btn btn-info" onclick="setIX()">
+                ix
+            </label>
+            
     </div>
+
+    <button type="button" class="btn" data-toggle="modal" data-target="#befundKuerzel">
+        Liste aller Befundkürzeln
+      </button>
 </div>
+ 
+  <!-- Modal -->
+  <div class="modal fade" id="befundKuerzel" tabindex="-1" role="dialog" aria-labelledby="Befundkürzel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Liste aller Befundkürzeln</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table class="wikitable" style="float:left; margin-right:1em;">
+                <tbody><tr>
+                <th>Kürzel</th>
+                <th>Bedeutung
+                </th></tr>
+                <tr>
+                <td>a</td>
+                <td>Adhäsivbrücke (Anker, Spanne)
+                </td></tr>
+                <tr>
+                <td>b</td>
+                <td>vorhandenes Brückenglied
+                </td></tr>
+                <tr>
+                <td>e</td>
+                <td>bereits ersetzter Zahn
+                </td></tr>
+                <tr>
+                <td>ew</td>
+                <td>ersetzter, aber erneuerungsbedürftiger Zahn
+                </td></tr>
+                <tr>
+                <td>f</td>
+                <td>fehlender Zahn
+                </td></tr>
+                <tr>
+                <td>i</td>
+                <td>vorhandenes Implantat mit intakter Suprakonstruktion
+                </td></tr>
+                <tr>
+                <td>ix</td>
+                <td>zu entfernendes Implantat
+                </td></tr>
+                <tr>
+                <td>k</td>
+                <td>vorhandene klinisch intakte Krone
+                </td></tr>
+                <tr>
+                <td>kw</td>
+                <td>erneuerungsbedürftige Krone
+                </td></tr>
+                <tr>
+                <td>pw</td>
+                <td>erhaltungswürdiger Zahn mit partiellen Substanzdefekten
+                </td></tr>
+                <tr>
+                <td>r</td>
+                <td>vorhandene Wurzelstiftkappe
+                </td></tr>
+                <tr>
+                <td>rw</td>
+                <td>erneuerungsbedürftige Wurzelstiftkappe
+                </td></tr>
+                <tr>
+                <td>sw</td>
+                <td>erneuerungsbedürftige Suprakonstruktion
+                </td></tr>
+                <tr>
+                <td>t</td>
+                <td>vorhandenes Teleskop
+                </td></tr>
+                <tr>
+                <td>tw</td>
+                <td>erneuerungsbedürftiges Teleskop
+                </td></tr>
+                <tr>
+                <td>ur</td>
+                <td>unzureichende Retention
+                </td></tr>
+                <tr>
+                <td>ww</td>
+                <td>erhaltungswürdiger Zahn mit weitgehender Zerstörung
+                </td></tr>
+                <tr>
+                <td>x</td>
+                <td>nicht erhaltungswürdiger Zahn
+                </td></tr>
+                <tr>
+                <td>)(</td>
+                <td>Lückenschluss
+                </td></tr>
+                </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
 	
 
 
@@ -68,6 +191,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
       const radius = 30;
       const startAngle = 0;
       const endAngle = Math.PI * 2;
+      const textCount=0;
       var mesh;
       var gui;
       var container,stats;
@@ -76,7 +200,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
       var raycaster,projector;
       var objects = [];
       var counter=1;
-
+    
       init();
       animate();
 
@@ -107,7 +231,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
             document.getElementById("kiefer").addEventListener("click", displayKiefer);
             document.getElementById("stl").addEventListener("click", displayStl);    
             document.getElementById("reset").addEventListener("click", resetView);
-            
+           
 
         /* Renderer */
             renderer = new THREE.WebGLRenderer();
@@ -115,10 +239,10 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setClearColor(new THREE.Color("hsl(0, 0%, 10%)"));
             container.appendChild(renderer.domElement);
-            projector = new THREE.Projector();
+           // projector = new THREE.Projector();
               
  
-				document.addEventListener( 'dblclick', ondblclick, false );//novo
+			document.addEventListener( 'dblclick', ondblclick, false );//novo
         
         /* Controls */
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -157,6 +281,7 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
             input.setAttribute("style","margin-left:10px;");
             input.setAttribute("class","form-control");
             input.setAttribute("type","text");
+            input.setAttribute("id","text"+name);
             input.setAttribute("placeholder","Kommentar zu dem Punkt "+name);
            
             
@@ -164,11 +289,6 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
             newcontent.appendChild(span);
             newcontent.appendChild(input);
             span.innerHTML=name;
-        
-            
-
-
-            
        //     newcontent.innerHTML=name;
             //while (newcontent.firstChild) {
             //    anno.appendChild(newcontent.firstChild);
@@ -299,6 +419,65 @@ Model Autor: https://www.cgtrader.com/free-3d-models/character/anatomy/human-tee
                     counter++; 
                     console.log(counter);
                 }
+        }
+        
+        function setK(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+                if (inputC.value==""){
+                inputC.value = "a ";}else{
+                inputC.value=inputC.value + "a ";
+            }
+     
+        }
+        function setB(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+            if (inputC.value==""){
+                    inputC.value = "b ";}else{
+                inputC.value=inputC.value + "b ";} 
+        }
+        function setF(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+            if (inputC.value==""){
+                    inputC.value = "f ";}else{
+                inputC.value=inputC.value + "f ";}  
+        }
+        function setI(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+            if (inputC.value==""){
+                    inputC.value = "i ";}else{
+                inputC.value=inputC.value + "i ";} 
+        }
+        function setIX(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+            if (inputC.value==""){
+                    inputC.value = "ix ";}else{
+                inputC.value=inputC.value + "ix ";} 
+        }
+        function setE(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+            if (inputC.value==""){
+                    inputC.value = "e ";}else{
+                inputC.value=inputC.value + "e ";} 
+        }
+        function setEW(){
+            var name2 = counter-1;
+            var name3 = "text"+name2.toString();
+            var inputC = document.getElementById(name3);
+            if (inputC.value==""){
+                    inputC.value = "ew ";}else{
+                inputC.value=inputC.value + "ew ";} 
         }
 
         function animate() {
